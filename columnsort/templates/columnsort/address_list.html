@@ -1,7 +1,9 @@
-{% extends 'base.html' %} {% load django_htmx %} {% django_htmx_script %} {% block content %}
+{% extends 'base.html' %}
+{% load django_htmx %}
+{% django_htmx_script %}
+{% block content %}
 
-    <section
-            x-data="{filterbar: false,
+    <section x-data="{filterbar: false,
     searchParameters: {
         search_first: '',
         search_last: '',
@@ -166,31 +168,14 @@
                 console.log(this.searchParameters.sort_order)
                 }
             }
-
-
-        },
+       },
 
     resetCols() {
-      this.columnShow.col1.display = false
-      this.columnShow.col1.order = false
-      this.columnShow.col2.display = false
-      this.columnShow.col2.order = false
-      this.columnShow.col3.display = false
-      this.columnShow.col3.order = false
-      this.columnShow.col4.display = false
-      this.columnShow.col4.order = false
-      this.columnShow.col5.display = false
-      this.columnShow.col5.order = false
-      this.columnShow.col6.display = false
-      this.columnShow.col6.order = false
-  },
-
-
-        {% comment %} $.each(this.columnShow, function(i, e) {
-            e.display = false
-            e.order = false {% endcomment %}
-
-    
+        $.each(this.columnShow, function(i, e) {
+        e.display = false
+        e.order = false
+        })
+    },
 
     resetSearch() {
        this.searchParameters.search_first = ''
