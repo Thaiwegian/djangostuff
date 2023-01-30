@@ -1,0 +1,518 @@
+{% extends 'base.html' %} {% load django_htmx %} {% django_htmx_script %} {% block content %}
+
+    <section
+            x-data="{filterbar: false,
+    searchParameters: {
+        search_first: '',
+        search_last: '',
+        search_address: '',
+        search_city: '',
+        search_state: '',
+        search_zip: '',
+        sort_order: ''
+    },
+    columnShow: {
+    col1: {display: false, order: false},
+    col2: {display: false, order: false},
+    col3: {display: false, order: false},
+    col4: {display: false, order: false},
+    col5: {display: false, order: false},
+    col6: {display: false, order: false},
+    },
+
+    colSort(col) {
+
+        this.resetCols()
+        console.log(this.columnShow)
+        if (col === 'col1') {
+
+            if (this.searchParameters.sort_order === 'first') {
+                this.searchParameters.sort_order = '-first'
+                this.columnShow.col1.display = true
+                this.columnShow.col1.order = true
+                console.log(this.searchParameters.sort_order)
+                }
+
+            else if (this.searchParameters.sort_order === '-first') {
+                this.searchParameters.sort_order = 'first'
+                this.columnShow.col1.display = true
+                this.columnShow.col1.order = false
+                console.log(this.searchParameters.sort_order)
+            }
+
+            else {
+                this.searchParameters.sort_order = 'first'
+                this.columnShow.col1.display = true
+                this.columnShow.col1.order = false
+                console.log(this.searchParameters.sort_order)
+                }
+        }
+        if (col === 'col2') {
+
+            if (this.searchParameters.sort_order === 'last') {
+                this.searchParameters.sort_order = '-last'
+                this.columnShow.col2.display = true
+                this.columnShow.col2.order = true
+                console.log(this.searchParameters.sort_order)
+                }
+
+            else if (this.searchParameters.sort_order === '-last'){
+                this.searchParameters.sort_order = 'last'
+                this.columnShow.col2.display = true
+                this.columnShow.col2.order = false
+                console.log(this.searchParameters.sort_order)
+            }
+
+            else {
+                this.searchParameters.sort_order = 'last'
+                this.columnShow.col2.display = true
+                this.columnShow.col2.order = false
+                console.log(this.searchParameters.sort_order)
+                }
+            }
+
+        if (col === 'col3') {
+
+            if (this.searchParameters.sort_order === 'address') {
+                this.searchParameters.sort_order = '-address'
+                this.columnShow.col3.display = true
+                this.columnShow.col3.order = true
+                console.log(this.searchParameters.sort_order)
+                }
+
+            else if (this.searchParameters.sort_order === '-address'){
+                this.searchParameters.sort_order = 'address'
+                this.columnShow.col3.display = true
+                this.columnShow.col3.order = false
+                console.log(this.searchParameters.sort_order)
+            }
+
+            else {
+                this.searchParameters.sort_order = 'address'
+                this.columnShow.col3.display = true
+                this.columnShow.col3.order = false
+                console.log(this.searchParameters.sort_order)
+                }
+            }
+
+        if (col === 'col4') {
+
+            if (this.searchParameters.sort_order === 'city') {
+                this.searchParameters.sort_order = '-city'
+                this.columnShow.col4.display = true
+                this.columnShow.col4.order = true
+                console.log(this.searchParameters.sort_order)
+                }
+
+            else if (this.searchParameters.sort_order === '-city'){
+                this.searchParameters.sort_order = 'city'
+                this.columnShow.col4.display = true
+                this.columnShow.col4.order = false
+                console.log(this.searchParameters.sort_order)
+            }
+
+            else {
+                this.searchParameters.sort_order = 'city'
+                this.columnShow.col4.display = true
+                this.columnShow.col4.order = false
+                console.log(this.searchParameters.sort_order)
+                }
+            }
+
+        if (col === 'col5') {
+
+            if (this.searchParameters.sort_order === 'state') {
+                this.searchParameters.sort_order = '-state'
+                this.columnShow.col5.display = true
+                this.columnShow.col5.order = true
+                console.log(this.searchParameters.sort_order)
+                }
+
+            else if (this.searchParameters.sort_order === '-state'){
+                this.searchParameters.sort_order = 'state'
+                this.columnShow.col5.display = true
+                this.columnShow.col5.order = false
+                console.log(this.searchParameters.sort_order)
+            }
+
+            else {
+                this.searchParameters.sort_order = 'state'
+                this.columnShow.col5.display = true
+                this.columnShow.col5.order = false
+                console.log(this.searchParameters.sort_order)
+                }
+            }
+
+        if (col === 'col6') {
+
+            if (this.searchParameters.sort_order === 'zip') {
+                this.searchParameters.sort_order = '-zip'
+                this.columnShow.col6.display = true
+                this.columnShow.col6.order = true
+                console.log(this.searchParameters.sort_order)
+                }
+
+            else if (this.searchParameters.sort_order === '-zip') {
+                this.searchParameters.sort_order = 'zip'
+                this.columnShow.col6.display = true
+                this.columnShow.col6.order = false
+                console.log(this.searchParameters.sort_order)
+            }
+
+            else {
+                this.searchParameters.sort_order = 'zip'
+                this.columnShow.col6.display = true
+                this.columnShow.col6.order = false
+                console.log(this.searchParameters.sort_order)
+                }
+            }
+
+
+        },
+
+    resetCols() {
+      this.columnShow.col1.display = false
+      this.columnShow.col1.order = false
+      this.columnShow.col2.display = false
+      this.columnShow.col2.order = false
+      this.columnShow.col3.display = false
+      this.columnShow.col3.order = false
+      this.columnShow.col4.display = false
+      this.columnShow.col4.order = false
+      this.columnShow.col5.display = false
+      this.columnShow.col5.order = false
+      this.columnShow.col6.display = false
+      this.columnShow.col6.order = false
+  },
+
+
+        {% comment %} $.each(this.columnShow, function(i, e) {
+            e.display = false
+            e.order = false {% endcomment %}
+
+    
+
+    resetSearch() {
+       this.searchParameters.search_first = ''
+       this.searchParameters.search_last = ''
+       this.searchParameters.search_address = ''
+       this.searchParameters.search_city =  ''
+       this.searchParameters.search_state = ''
+       this.searchParameters.search_zip = ''
+    },
+
+    urlParams(params) {
+        return '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&')
+    }
+
+}"
+    >
+        <div class="flex mx-8 mt-5 space-x-3 align-center items-center">
+            <div>
+                <button
+                        @click="filterbar = !filterbar"
+                        class="text-white bg-slate-600 rounded-md p-1 shadow">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div>
+                <p class="text-slate-800 font-bold">Displaying <span id="scount"
+                                                                     _="on showCount(counter) put counter into me">{{ search_count }}</span>
+                    of {{ total_count }} sites</p>
+            </div>
+
+        </div>
+
+        <div class="flex mx-8">
+            <table class="table w-full mt-5 bg-white">
+
+                <thead class="bg-slate-400 ">
+
+                <tr x-show="filterbar" x-transition.opacity.delay.50ms id="filter" class="">
+                    <th class="ml-3 text-left ">
+                        <button
+                                class="m-2 mb-3 p-2 text-white bg-slate-500 rounded-l  border-1 border-slate-800 shadow-md whitespace-nowrap"
+                                hx-get="{% url 'columnsort:address_list' %}"
+                                hx-trigger="click"
+                                hx-target="#search-target"
+                                hx-push-url="false"
+                                x-bind:hx-vals="JSON.stringify(searchParameters)"
+                                @click="resetSearch()">
+                            Clear Filters
+                        </button>
+                        <br>
+                        {#        </th>#}
+
+                        {#        <th class=bg-blue-300>#}
+                        <input
+                                type="text"
+
+                                placeholder="First Name"
+                                class="ml-2 border-slate-700 border-2 p-1 mb-2 w-5/6"
+                                name="search_first"
+                                id="search_first"
+                                hx-get="{% url 'columnsort:address_list' %}"
+                                hx-trigger="keyup changed delay:500ms"
+                                hx-target="#search-target"
+                                hx-push-url="false"
+                                x-model="searchParameters.search_first"
+                                x-bind:hx-vals="JSON.stringify(searchParameters)"
+                                x-ref="search_first"
+                        />
+                    </th>
+
+                    <th class="text-left">
+                        <input
+                                type="text"
+
+                                name="search_last"
+                                placeholder="Last Name"
+                                class="border-slate-700 border-2 p-1 mt-12 w-5/6"
+                                id="search_last"
+                                hx-get="{% url 'columnsort:address_list' %}"
+                                hx-trigger="keyup changed delay:500ms"
+                                hx-target="#search-target"
+                                hx-push-url="false"
+                                x-model="searchParameters.search_last"
+                                x-bind:hx-vals="JSON.stringify(searchParameters)"
+                                x-ref="search_last"
+                        />
+                    </th>
+
+                    <th class="text-left">
+                        <input
+                                type="text"
+                                name="search_address"
+                                placeholder="Address"
+                                class="border-slate-700 border-2 p-1 mt-12 w-5/6"
+                                id="search_address"
+                                hx-get="{% url 'columnsort:address_list' %}"
+                                hx-trigger="keyup changed delay:500ms"
+                                hx-target="#search-target"
+                                hx-push-url="false"
+                                x-model="searchParameters.search_address"
+                                x-bind:hx-vals="JSON.stringify(searchParameters)"
+                                x-ref="search_address"
+                        />
+                    </th>
+
+                    <th class="text-left">
+                        <input
+                                type="text"
+
+                                name="search_city"
+                                placeholder="City"
+                                id="search_city"
+                                class="border-slate-700 border-2 p-1 mt-12 w-5/6"
+                                id="search_city"
+                                hx-get="{% url 'columnsort:address_list' %}"
+                                hx-trigger="keyup changed delay:500ms"
+                                hx-target="#search-target"
+                                hx-push-url="false"
+                                x-model="searchParameters.search_city"
+                                x-bind:hx-vals="JSON.stringify(searchParameters)"
+                                x-ref="search_city"
+                        />
+                    </th>
+
+                    <th class="text-left">
+                        <input
+                                type="text"
+
+                                placeholder="State"
+                                class="border-slate-700 border-2 p-1 mt-12 w-5/6"
+                                id="search_state"
+                                name="search_state"
+                                hx-get="{% url 'columnsort:address_list' %}"
+                                hx-trigger="keyup changed delay:500ms"
+                                hx-target="#search-target"
+                                hx-push-url="false"
+                                x-model="searchParameters.search_state"
+                                x-bind:hx-vals="JSON.stringify(searchParameters)"
+                                x-ref="search_state"
+                        />
+                    </th>
+
+                    <th class="text-left">
+                        <input
+                                type="text"
+                                placeholder="Zip"
+                                class="border-slate-700 border-2 p-1 mt-12 w-5/6"
+                                id="search_zip"
+                                name="search_zip"
+                                hx-get="{% url 'columnsort:address_list' %}"
+                                hx-trigger="keyup changed delay:500ms"
+                                hx-target="#search-target"
+                                hx-push-url="false"
+                                x-model="searchParameters.search_zip"
+                                x-bind:hx-vals="JSON.stringify(searchParameters)"
+                                x-ref="search_zip"
+                        />
+                    </th>
+
+                </tr>
+
+                <tr class="text-slate-800 text-left">
+                    <th
+                            @click="colSort('col1')"
+                            hx-get="{% url 'columnsort:address_list' %}"
+                            hx-trigger="click"
+                            hx-target="#search-target"
+                            hx-push-url="false"
+                            x-bind:hx-vals="JSON.stringify(searchParameters)"
+                            class=""
+                            role="button">
+
+                        <div class="flex ml-2 space-x-2 items-center py-1.5">
+                            <div>
+                                First Name
+                            </div>
+                            <div>
+              <span x-show="columnShow.col1.display">
+                <svg xmlns="http://www.w3.org/2000/svg" x-bind:class="columnShow.col1.order ? 'rotate-180' : ''"
+                     class="h-4 w-4 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+                </svg>
+              </span>
+                            </div>
+
+                        </div>
+                    </th>
+
+
+                    <th
+                            @click="colSort('col2')"
+                            hx-get="{% url 'columnsort:address_list' %}"
+                            hx-trigger="click"
+                            hx-target="#search-target"
+                            hx-push-url="false"
+                            x-bind:hx-vals="JSON.stringify(searchParameters)"
+                            class=""
+                            role="button">
+
+                        <div class="flex space-x-2 items-center py-1.5">
+                            <div>
+                                Last Name
+                            </div>
+                            <div>
+              <span x-show="columnShow.col2.display" class=""
+              ><svg xmlns="http://www.w3.org/2000/svg" x-bind:class="columnShow.col2.order ? 'rotate-180' : ''"
+                    class="h-4 w-4 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+                </svg></span>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th
+                            @click="colSort('col3')"
+                            hx-get="{% url 'columnsort:address_list' %}"
+                            hx-trigger="click"
+                            hx-target="#search-target"
+                            hx-push-url="false"
+                            x-bind:hx-vals="JSON.stringify(searchParameters)"
+                            class=""
+                            role="button"
+                    >
+                        <div class="flex space-x-2 items-center py-1.5">
+                            <div>
+                                Address
+                            </div>
+                            <div>
+              <span x-show="columnShow.col3.display" class=""
+              ><svg xmlns="http://www.w3.org/2000/svg" x-bind:class="columnShow.col3.order ? 'rotate-180' : ''"
+                    class="h-4 w-4 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+                </svg></span>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th
+                            @click="colSort('col4')"
+                            hx-get="{% url 'columnsort:address_list' %}"
+                            hx-trigger="click"
+                            hx-target="#search-target"
+                            hx-push-url="false"
+                            x-bind:hx-vals="JSON.stringify(searchParameters)"
+                            class="text-left"
+                            role="button"
+                    >
+                        <div class="flex space-x-2 items-center py-1.5">
+                            <div>
+                                City
+                            </div>
+                            <div>
+              <span x-show="columnShow.col4.display" class=""
+              ><svg xmlns="http://www.w3.org/2000/svg" x-bind:class="columnShow.col4.order ? 'rotate-180' : ''"
+                    class="h-4 w-4 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+                </svg></span>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th
+                            @click="colSort('col5')"
+                            hx-get="{% url 'columnsort:address_list' %}"
+                            hx-trigger="click"
+                            hx-target="#search-target"
+                            hx-push-url="false"
+                            x-bind:hx-vals="JSON.stringify(searchParameters)"
+                            class="px-2 h6"
+                            role="button"
+                    >
+                        <div class="flex space-x-2 items-center py-1.5">
+                            <div>
+                                State
+                            </div>
+                            <div>
+                  <span x-show="columnShow.col5.display">
+              <svg xmlns="http://www.w3.org/2000/svg" x-bind:class="columnShow.col5.order ? 'rotate-180' : ''"
+                   class="h-4 w-4 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+                </svg></span>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th
+                            @click="colSort('col6')"
+                            hx-get="{% url 'columnsort:address_list' %}"
+                            hx-trigger="click"
+                            hx-target="#search-target"
+                            hx-push-url="false"
+                            x-bind:hx-vals="JSON.stringify(searchParameters)"
+                            class=""
+                            role="button"
+                    >
+                        <div class="flex space-x-2 items-center py-1.5">
+                            <div>
+                                Zip
+                            </div>
+                            <div>
+              <span x-show="columnShow.col6.display">
+                <svg xmlns="http://www.w3.org/2000/svg" x-bind:class="columnShow.col6.order ? 'rotate-180' : ''"
+                     class="h-4 w-4 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+                </svg>
+             </span>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+
+                <tbody id="search-target">
+                {% include 'columnsort/partials/address_list_partial.html' %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+{% endblock content %}

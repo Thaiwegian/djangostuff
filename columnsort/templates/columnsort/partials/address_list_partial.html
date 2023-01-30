@@ -1,0 +1,36 @@
+{% for person in address_list %}
+
+    {% if forloop.last %}
+        <tr {% if page_obj.has_next %}hx-get="{% url 'columnsort:address_list' %}?page={{ page_obj.next_page_number }}{% endif %}"
+            hx-vals='js:{"search_first": "{{ search_first }}",
+            "search_last": "{{ search_last }}",
+            "search_address": "{{ search_address }}",
+            "search_city": "{{ search_city }}",
+            "search_state": "{{ search_state }}",
+            "search_zip": "{{ search_zip }}",
+            "sort_order": "{{ sort_order }}",
+            }'
+            hx-push-url="false"
+            hx-trigger="revealed"
+            hx-swap="afterend">
+            {% else %}
+        <tr class="">
+    {% endif %}
+
+<td class="px-2 py-1.5">{{ person.first }}</td>
+<td class=" py-1.5">{{ person.last }}</td>
+<td class=" py-1.5">{{ person.address }}</td>
+<td class=" py-1.5">{{ person.city }}</td>
+<td class="px-2 py-1.5">{{ person.state }}</td>
+<td class=" py-1.5">{{ person.zip }}</td>
+</tr>
+
+{% endfor %}
+
+<script type="text/hyperscript">
+  on load
+     send showCount(counter:{{ search_count }}) to #scount
+    end
+
+</script>
+
